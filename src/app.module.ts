@@ -3,22 +3,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {User} from "./user/user.entity";
+import { ArticleModule } from './article/article.module';
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
   imports: [
+      ConfigModule.forRoot(),
       TypeOrmModule.forRoot({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: 'postgres',
-        database: 'reddit',
+        host: process.env.DATABASE_URL || 'localhost',
+        port: parseInt(process.env.DATABASE_PORT,10) || 5432,
+        username: process.env.DATABASE_USER ||'postgres',
+        password: process.env.DATABASE_PASSWORD || 'postgres',
+        database: process.env.DATABASE_NAME || 'reddit',
         entities: [],
         synchronize: true,
         autoLoadEntities: true,
       }),
       UserModule,
+      ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
