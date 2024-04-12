@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import { ArticleModule } from './article/article.module';
 import {ConfigModule} from "@nestjs/config";
+import { SubModule } from './sub/sub.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import {ConfigModule} from "@nestjs/config";
       }),
       UserModule,
       ArticleModule,
+      SubModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -10,6 +10,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import {Exclude} from "class-transformer";
 import {ArticleEntity} from "../article/article.entity";
+import {SubEntity} from "../sub/sub.entity";
 
 @Entity('users')
 export class User {
@@ -38,6 +39,10 @@ export class User {
 
     @OneToMany(()=>ArticleEntity, (articleEntity: ArticleEntity)=>articleEntity.user)
     articles:ArticleEntity[];
+
+    @OneToMany(()=>SubEntity, (subEntity: SubEntity)=>subEntity.user)
+    subs:SubEntity[];
+
     @BeforeInsert()
     async hashPassword(){
         this.password = await bcrypt.hash(this.password,10);
