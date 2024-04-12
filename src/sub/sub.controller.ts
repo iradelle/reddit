@@ -1,26 +1,31 @@
-import {Controller, Delete, Get, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {SubService} from "./sub.service";
+import {CreateUpdateSubDto} from "./create-update-sub.dto";
 
-@Controller('sub')
+@Controller('subs')
 export class SubController {
 
-    @Post()
-    createSub() {
+    constructor(private readonly subService: SubService) {
+    }
 
+    @Post()
+    createSub(@Body() createSub: CreateUpdateSubDto) {
+        return this.subService.create(createSub);
     }
 
     @Get()
     readAll() {
-
+        return this.subService.readAll();
     }
 
-    @Patch()
-    updateSub() {
-
+    @Patch(':id')
+    updateSub(@Param('id') id: number, @Body() updateSub: CreateUpdateSubDto) {
+        return this.subService.update(id, updateSub);
     }
 
-    @Delete()
-    deleteSub() {
-
+    @Delete(':id')
+    deleteSub(@Param('id') id: number) {
+        return this.subService.delete(id);
     }
 
 }
