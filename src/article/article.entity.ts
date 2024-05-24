@@ -12,16 +12,12 @@ import {SubEntity} from "../sub/sub.entity";
 
 @Entity('articles')
 export class ArticleEntity {
-
     @PrimaryGeneratedColumn()
     id: number;
-
     @Column()
     content:string;
-
     @CreateDateColumn()
     created_at: Date;
-
     @UpdateDateColumn()
     updated_at:Date;
 

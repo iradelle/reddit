@@ -15,36 +15,28 @@ import {SubEntity} from "../sub/sub.entity";
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn()
-    id: number;
-
+    id:number;
     @Column()
     first_name: string;
-
     @Column()
     last_name: string;
-
     @Column()
     email: string;
-
-    @Exclude()
     @Column()
-    password: string;
-
+    pass: string;
     @CreateDateColumn()
     created_at: Date;
-
     @UpdateDateColumn()
     updated_at: Date;
-
 
     @OneToMany(()=>ArticleEntity, (articleEntity: ArticleEntity)=>articleEntity.user)
     articles:ArticleEntity[];
 
     @OneToMany(()=>SubEntity, (subEntity: SubEntity)=>subEntity.user)
     subs:SubEntity[];
-
     @BeforeInsert()
-    async hashPassword(){
-        this.password = await bcrypt.hash(this.password,10);
+    async hashPassword() {
+        this.pass = await bcrypt.hash(this.pass,10);
     }
+
 }

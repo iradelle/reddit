@@ -3,29 +3,31 @@ import {LoginDto} from "./login.dto";
 import {UserService} from "../user/user.service";
 import * as bcrypt from 'bcrypt';
 import {User} from "../user/user.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
 import {JwtService} from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService,
-                private jwtService: JwtService) {}
+    constructor(
+        private readonly userService: UserService,
+        private jwtService: JwtService
+    ) {
+    }
 
     async validate(loginDto: LoginDto) {
-        const user: User = await this.userService.getUserByEmail(loginDto.email);
-
+        console.log("Service Auth validate");
+        //preveri, če user v bazi s tem emailom obstaja
+        const user:User = await this.userService.getUserByEmail(loginDto.email);
         if (!user) {
-            throw new NotFoundException('User with this email does not exist.')
+            throw new NotFoundException('Uporabnik ne obstaja');
+        }
+        //preverimo gesla
+        if (!(await bcrypt.compare(loginDto.password,user.pass))) {
+            throw new BadRequestException('Gesli se ne ujemata');
         }
 
-        // preveri geslo
-        if (!(await bcrypt.compare(loginDto.password, user.password))) {
-            throw new BadRequestException('Password incorrect');
-        }
-
-        // vrne JWT Token
         const payload = {email:user.email, sub:user.id};
+
         return this.jwtService.sign(payload);
+
     }
 }
